@@ -16,10 +16,10 @@ const limiter = rateLimit({
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
 });
 
-app.use(limiter);
 
 app.use(express.json());
 app.use(cors());
+app.use(limiter);
 
 const genAI = new GoogleGenerativeAI(process.env.GKEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
