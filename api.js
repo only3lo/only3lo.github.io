@@ -34,7 +34,7 @@ const rateLimitMap = new Map(); // IP -> [timestamps]
 function isRateLimited(ip) {
     const now = Date.now();
     const windowMs = 60 * 1000; // 1 minute
-    const maxRequests = 5;
+    const maxRequests = 3;
 
     if (!rateLimitMap.has(ip)) {
         rateLimitMap.set(ip, []);
