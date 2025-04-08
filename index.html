@@ -50,6 +50,12 @@
             cursor: pointer;
         }
 
+        .message div {
+            text-wrap: wrap;
+            overflow-x: clip;
+            overflow-y: auto;
+        }
+
         #msgBar {
             border-top: solid 1px #ddd;
             position: fixed;
@@ -268,6 +274,8 @@
                     if (okay.error) alert(okay.error);
                     else input.value = "";
                     refreshMsgs();
+                }).catch(e => {
+                    alert("Slow down!");
                 });
             } else {
                 const id = responding;
@@ -275,6 +283,8 @@
                     if (okay.error) alert(okay.error);
                     else input.value = "";
                     refreshMsgs();
+                }).catch(e => {
+                    alert("Slow down!");
                 });
             }
         }
