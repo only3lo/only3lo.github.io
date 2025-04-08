@@ -1,3 +1,4 @@
 /node_modules/
 ips.json
 msgs.json
+.env

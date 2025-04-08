@@ -1,12 +1,20 @@
 import express from 'express';
 import cors from 'cors';
 import fs from 'fs';
+import dotenv from 'dotenv';
+import { GoogleGenerativeAI } from "@google/generative-ai";
+dotenv.config();
 
 const app = express();
 
 app.set('trust proxy', true);
 app.use(express.json());
 app.use(cors());
+
+const genAI = new GoogleGenerativeAI(process.env.GKEY);
+const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+const filter = "Please check if the message from user violates guidelines: 'Direct threats are disallowed. Critisism is allowd always (saying that someone is stupid anything more offensive should be filtered) bad words at the level of 'f*ck' should also be filtered CALLING SOMEONE STUPID IS ALWAYS OKAY, DO NOT FILTER IT!' ALWAYS ANWSER ONLY ONE WORD: 'yes'  or 'no' Message from user: '";
+
 
 let msgs = [];
 function saveMsgs() {
@@ -58,11 +66,12 @@ app.get("/ips", (_, res) => {
     }
 });
 
-app.get("/post-msg/:msg", (req, res) => {
+app.get("/post-msg/:msg", async (req, res) => {
     if (ips[req.ip] === undefined) ips[req.ip] = 0;
     ips[req.ip] += 1;
     saveIps();
     try {
+        if ((await model.generateContent(filter + req.params.msg + "'")).response.text().toLowerCase().replaceAll("\n", '') !== "no") throw new Error("Offensive message!");
         const ip = req.ip;
         if (isRateLimited(ip)) {
             return res.status(429).json({ error: "Rate limit exceeded. Max 10 posts per minute." });
@@ -76,11 +85,12 @@ app.get("/post-msg/:msg", (req, res) => {
     }
 });
 
-app.get("/respond/:msg", (req, res) => {
+app.get("/respond/:msg", async (req, res) => {
     if (ips[req.ip] === undefined) ips[req.ip] = 0;
     ips[req.ip] += 1;
     saveIps();
     try {
+        if ((await model.generateContent(filter + req.params.msg + "'")).response.text().toLowerCase().replaceAll("\n", '') !== "no") throw new Error("Offensive message!");
         const ip = req.ip;
         if (isRateLimited(ip)) {
             return res.status(429).json({ error: "Rate limit exceeded. Max 10 responses per minute." });
