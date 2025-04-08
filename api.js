@@ -19,7 +19,12 @@ const limiter = rateLimit({
 
 app.use(express.json());
 app.use(cors());
-app.use(limiter);
+app.use((req, res, next) => {
+    if (req.path === '/msgs') {
+        return next(); // Skip rate limiting for /msgs route
+    }
+    limiter(req, res, next); // Apply rate limiting to other routes
+});
 
 const genAI = new GoogleGenerativeAI(process.env.GKEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
