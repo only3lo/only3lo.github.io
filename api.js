@@ -71,8 +71,8 @@ app.get("/post-msg/:msg", async (req, res) => {
     ips[req.ip] += 1;
     saveIps();
     try {
-        if ((await model.generateContent(filter + req.params.msg + "'")).response.text().toLowerCase().replaceAll("\n", '') !== "no") throw new Error("Offensive message!");
         const ip = req.ip;
+        if ((await model.generateContent(filter + req.params.msg + "'")).response.text().toLowerCase().replaceAll("\n", '') !== "no") throw new Error("Offensive message!");
         if (isRateLimited(ip)) {
             return res.status(429).json({ error: "Rate limit exceeded. Max 10 posts per minute." });
         }
@@ -90,11 +90,11 @@ app.get("/respond/:msg", async (req, res) => {
     ips[req.ip] += 1;
     saveIps();
     try {
-        if ((await model.generateContent(filter + req.params.msg + "'")).response.text().toLowerCase().replaceAll("\n", '') !== "no") throw new Error("Offensive message!");
         const ip = req.ip;
         if (isRateLimited(ip)) {
             return res.status(429).json({ error: "Rate limit exceeded. Max 10 responses per minute." });
         }
+        if ((await model.generateContent(filter + req.params.msg + "'")).response.text().toLowerCase().replaceAll("\n", '') !== "no") throw new Error("Offensive message!");
 
         if (req.query.msgid === undefined) throw new Error("msgid param not passed!");
         const msgIndex = parseInt(req.query.msgid);
