@@ -1,0 +1,299 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Only in 3LO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&amp;family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;family=Quicksand:wght@300..700&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h1, h2, h3, p {
+            font-weight: 400;
+            margin: 0;
+        }
+
+        .navbar {
+            background: #333;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar h1 {
+            text-align: center;
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .message {
+            width: calc(100% - 40px);
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+
+        .message:hover {
+            cursor: pointer;
+        }
+
+        #msgBar {
+            border-top: solid 1px #ddd;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            padding: 15px 25px;
+            width: calc(100vw - 50px);
+            min-height: 60px;
+            background: #fff;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #msgBar > #msgBarInput {
+            display: flex;
+            justify-content: space-evenly;
+            gap: 10px;
+        }
+
+        #responding {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+
+        #responding > button {
+            border: 1px solid #ccc;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            width: 100px;
+        }
+
+        form {
+            margin: 0;
+        }
+
+        #msgBar > #msgBarInput input {
+            flex: 0.7;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+            font-size: 16px;
+            padding: 12px;
+            border-radius: 4px;
+            color: #333;
+        }
+
+        #msgBar > #msgBarInput button {
+            flex: 0.3;
+            border: 1px solid #ccc;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        #msgBar button:hover {
+            background-color: #45a049;
+            cursor: pointer;
+        }
+
+        #msgs {
+            padding: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            flex-direction: column-reverse;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        #end {
+            height: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <h1>Only in 3LO</h1>
+</div><br><br><br><br><br>
+
+<div class="content">
+    <h2 style="text-align: center;">III Lo Chat</h2>
+    <p style="text-align: center; color: #696969">Bo spotted jest ass</h2>
+    <p style="margin-top: 70px; padding-left: 30px; color: #696969">Newest frst.</p>
+    <div id="msgs">
+        
+    </div>
+    <form id="msgBar">
+        <div id="responding" style="display: none;">
+            <h3>Responding in thread...</h3>
+            <button id="msg" type="button" onclick="stopResponding()">Cancel</button>
+        </div>
+        <div id="msgBarInput">
+            <input type="text" autocomplete="off" required autofocus placeholder="Type a message...">
+            <button id="msg" type="submit">Publish</button>
+        </div>
+    </div>
+    <br><br><br><br><br>
+    <script>
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = `${name}=${encodeURIComponent(value)}; ${expires}; path=/`;
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const cookies = decodedCookie.split(';');
+            for(let i = 0; i < cookies.length; i++) {
+                let c = cookies[i].trim();
+                if (c.indexOf(nameEQ) === 0) {
+                return c.substring(nameEQ.length);
+                }
+            }
+            return null;
+        }
+
+        if (getCookie("a") !== "a") {
+            if (confirm("By accessing this website you understand that: 1. The creator is not responsible for it in any way or the contet posted on it. 2. That you will not spread hate. 3. That you will not post explicit content. 4. That you understand that this website is unmoderated")) setCookie("a", "a");
+            else document.location.href
+        }
+
+        let msgss = [];
+        let responding = null;
+    
+        function addMsg(msg, id) {
+            const msgsE = document.getElementById("msgs");
+    
+            const msgE = document.createElement("div");
+            msgE.className = "message";
+            msgE.id = "msg-" + id;
+    
+            const ts = document.createElement("p");
+            ts.innerText = "Last message " + msg.ts;
+            msgE.appendChild(ts);
+    
+            const msgT = document.createElement("h3");
+            msgT.innerText = msg.msg;
+            msgE.appendChild(msgT);
+    
+            const msgResps = document.createElement("div");
+            msgResps.className = "msgResps";
+            msgE.appendChild(msgResps);
+    
+            // Render responses (if any)
+            if (msg.responses && msg.responses.length > 0) {
+                for (const res of msg.responses) {
+                    const arrow = document.createElement("p");
+                    arrow.innerHTML = "↓";
+                    arrow.style.marginLeft = "10px";
+    
+                    const resE = document.createElement("p");
+                    resE.innerText = res;
+    
+                    msgResps.appendChild(arrow);
+                    msgResps.appendChild(resE);
+                }
+            }
+    
+            msgE.onclick = () => {
+                stopResponding();
+                respond(id);
+                document.querySelector('#msgBar input').focus();
+                msgE.style.background = "#dddddd";
+            };
+    
+            msgsE.appendChild(msgE);
+        }
+    
+        async function refreshMsgs() {
+            try {
+                const res = await fetch("https://only3lo-github-io.onrender.com/msgs");
+                const msgs = await res.json();
+    
+                // Only update if something changed
+                if (JSON.stringify(msgss) !== JSON.stringify(msgs.msgs)) {
+                    msgss = msgs.msgs;
+    
+                    const msgsE = document.getElementById("msgs");
+                    msgsE.innerHTML = ""; // Clear all current messages
+    
+                    // Re-render all messages
+                    msgss.forEach((msg, id) => {
+                        addMsg(msg, id);
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching messages:", error);
+            }
+        }
+    
+        setInterval(refreshMsgs, 700);
+        (async () => {
+            await refreshMsgs();
+        })();
+    
+        function msg(event) {
+            console.log("post msg");
+            event.preventDefault();
+            const input = document.querySelector('#msgBar input');
+            if (responding === null) {
+                fetch("https://only3lo-github-io.onrender.com/post-msg/" + encodeURIComponent(input.value)).then(res => res.json()).then(okay => {
+                    if (okay.error) alert(okay.error);
+                    else input.value = "";
+                    refreshMsgs();
+                });
+            } else {
+                const id = responding;
+                fetch("https://only3lo-github-io.onrender.com/respond/" + encodeURIComponent(input.value) + "?msgid=" + id).then(res => res.json()).then(okay => {
+                    if (okay.error) alert(okay.error);
+                    else input.value = "";
+                    refreshMsgs();
+                });
+            }
+        }
+    
+        document.getElementById("msgBar").addEventListener("submit", msg);
+    
+        function stopResponding() {
+            if (responding === null) return;
+            const msgEl = document.getElementById("msg-" + responding);
+            if (msgEl) {
+                msgEl.style.background = "";
+            }
+            responding = null;
+            document.getElementById("responding").style.display = "none";
+        }
+    
+        function respond(msgId) {
+            document.getElementById("responding").style.display = "";
+            responding = msgId;
+        }
+    </script>
+</html>
