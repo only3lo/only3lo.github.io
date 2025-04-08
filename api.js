@@ -3,9 +3,20 @@ import cors from 'cors';
 import fs from 'fs';
 import dotenv from 'dotenv';
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { rateLimit } from 'express-rate-limit'
+
 dotenv.config();
 
 const app = express();
+
+const limiter = rateLimit({
+	windowMs: 30 * 1000, // 15 minutes
+	limit: 3, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+	standardHeaders: 'draft-8', // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+});
+
+app.use(limiter);
 
 app.set('trust proxy', true);
 app.use(express.json());
@@ -27,25 +38,6 @@ function saveIps() {
     fs.writeFileSync("./ips.json", JSON.stringify(ips, null, 4));
 }
 if (fs.existsSync("./ips.json")) ips = JSON.parse(fs.readFileSync("./ips.json"));
-
-// Rate limiting logic
-const rateLimitMap = new Map(); // IP -> [timestamps]
-
-function isRateLimited(ip) {
-    const now = Date.now();
-    const windowMs = 60 * 1000; // 1 minute
-    const maxRequests = 3;
-
-    if (!rateLimitMap.has(ip)) {
-        rateLimitMap.set(ip, []);
-    }
-
-    const timestamps = rateLimitMap.get(ip).filter(ts => now - ts < windowMs);
-    timestamps.push(now);
-    rateLimitMap.set(ip, timestamps);
-
-    return timestamps.length > maxRequests;
-}
 
 app.get("/msgs", (req, res) => {
     if (ips[req.ip] === undefined) ips[req.ip] = 0;
@@ -73,9 +65,6 @@ app.get("/post-msg/:msg", async (req, res) => {
     try {
         const ip = req.ip;
         if ((await model.generateContent(filter + req.params.msg + "'")).response.text().toLowerCase().replaceAll("\n", '') !== "no") throw new Error("Offensive message!");
-        if (isRateLimited(ip)) {
-            return res.status(429).json({ error: "Rate limit exceeded. Max 10 posts per minute." });
-        }
 
         msgs.push({ msg: req.params.msg, ts: new Date().toLocaleString(), responses: [] });
         saveMsgs();
@@ -91,9 +80,6 @@ app.get("/respond/:msg", async (req, res) => {
     saveIps();
     try {
         const ip = req.ip;
-        if (isRateLimited(ip)) {
-            return res.status(429).json({ error: "Rate limit exceeded. Max 10 responses per minute." });
-        }
         if ((await model.generateContent(filter + req.params.msg + "'")).response.text().toLowerCase().replaceAll("\n", '') !== "no") throw new Error("Offensive message!");
 
         if (req.query.msgid === undefined) throw new Error("msgid param not passed!");
