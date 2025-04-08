@@ -13,7 +13,7 @@ app.use(cors());
 
 const genAI = new GoogleGenerativeAI(process.env.GKEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-const filter = "Please check if the message from user violates guidelines: 'Direct threats are disallowed. Critisism is allowd always (saying that someone is stupid anything more offensive should be filtered) bad words at the level of 'f*ck' should also be filtered CALLING SOMEONE STUPID IS ALWAYS OKAY, DO NOT FILTER IT!' ALWAYS ANWSER ONLY ONE WORD: 'yes'  or 'no' Message from user: '";
+const filter = "Please check if the message from user violates guidelines: 'Direct threats are disallowed. Critisism is allowd always (saying that someone is stupid anything more offensive should be filtered) bad words at the level of 'f*ck' should also be filtered CALLING SOMEONE STUPID IS ALWAYS OKAY, DO NOT FILTER IT! BLOCK ALL SEXUAL OFFENSIVE MESSAGES' ALWAYS ANWSER ONLY ONE WORD: 'yes'  or 'no' Message from user: '";
 
 
 let msgs = [];
